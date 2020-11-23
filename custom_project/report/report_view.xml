@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+
+		<!-- QWeb Reports -->
+        <report
+            id="action_report_productivity_report"
+            model="productivity.report.wizard"
+            string="Productivity Report"
+            report_type="qweb-html"
+            name="custom_project.report_productivity_report"
+            file="Productivity Report"
+            menu="False"
+            attachment_use="False"/>
+            
+	</data>
+</odoo>

@@ -1,0 +1,48 @@
+<odoo>
+	<data>
+
+		<record id="project_project_view_form_inherit_productivity" model="ir.ui.view">
+			<field name="name">project.project.view.form.inherit.productivity</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.project_project_view_form_simplified" />
+			<field name="arch" type="xml">
+
+				<field name="user_id" position="after">
+					<field name="productivity" />
+				</field>
+
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_task_form2_inherited_productivity">
+			<field name="name">project.task.form.inherited.productivity</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_form2" />
+			<field name="arch" type="xml">
+
+				<field name="user_id" position="after">
+					<field name="productivity" />
+				</field>
+
+			</field>
+		</record>
+
+		<record id="edit_project_inherit_productivity" model="ir.ui.view">
+			<field name="name">project.project.form.inherit.productivity</field>
+			<field name="model">project.project</field>
+			<field name="inherit_id" ref="project.edit_project" />
+			<field name="arch" type="xml">
+
+<!-- 				<button name="%(project.act_project_project_2_project_task_all)d" position="attributes"> -->
+<!-- 					<attribute name="context">{'default_productivity': productivity}</attribute> -->
+<!-- 				</button> -->
+
+				<field name="partner_id" position="after">
+					<field name="productivity" />
+				</field>
+
+			</field>
+		</record>
+
+	</data>
+</odoo>

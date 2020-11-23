@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!-- Top menu item -->
+	<menuitem name="Productivity" id="menu_main_productivity" web_icon="project,static/description/icon.png"
+		sequence="60" groups="group_productivity_user" />
+
+	<menuitem id="menu_productivit_config" name="Configuration" parent="menu_main_productivity" sequence="100"
+		groups="project.group_project_manager" />
+
+
+	<!-- Productivity Target -->
+	<record id="view_productivity_target_form" model="ir.ui.view">
+		<field name="name">project.task.productivity.target.form</field>
+		<field name="model">project.task</field>
+		<field name="arch" type="xml">
+			<form string="Productivity Target" class="o_form_project_tasks">
+				<sheet>
+					<widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+						attrs="{'invisible': [('active', '=', True)]}" />
+					<div class="oe_title pr-0">
+						<h1 class="d-flex flex-row justify-content-between">
+							<field name="name" class="o_task_name text-truncate" placeholder="Task Title..." />
+						</h1>
+					</div>
+					<group>
+						<group>
+							<field name="project_id" domain="[('active', '=', True), ('company_id', '=', company_id)]"
+								options="{'no_create': True, 'no_create_edit': True}" />
+							<field name="active" invisible="1" />
+							<field name="company_id" invisible="1" />
+							<field name="project_type_id" options="{'no_create': True, 'no_create_edit': True}" />
+							<field name="user_id" string="Project Manager" options="{'no_create': True, 'no_create_edit': True}"
+								attrs="{'readonly':[('active','=', False)]}" />
+							<field name="productivity" />
+							<field name="target_year" />
+							<field name="target_month" />
+							<field name="project_employee_ids" widget="many2many_tags" invisible="1" />
+							<field name="employee_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}" />
+						</group>
+					</group>
+					<notebook>
+						<page string="Timesheets" id="timesheets_tab" attrs="{'invisible': [('allow_timesheets', '=', False)]}">
+							<field name="analytic_account_active" invisible="1" />
+							<field name="allow_timesheets" invisible="1" />
+							<field name="timesheet_ids" mode="tree,kanban"
+								attrs="{'invisible': [('analytic_account_active', '=', False)]}"
+								context="{'default_project_id': project_id, 'default_name':''}">
+								<tree editable="bottom" string="Timesheet Activities" default_order="date">
+									<field name="date" />
+									<field name="user_id" invisible="1" />
+									<field name="employee_id" required="1" />
+									<field name="name" />
+									<field name="records" />
+									<field name="unit_amount" widget="timesheet_uom" />
+									<field name="productivity_grade" readonly="1" />
+									<field name="project_id" invisible="1" />
+									<field name="company_id" invisible="1" />
+								</tree>
+								<form string="Timesheet Activities">
+									<sheet>
+										<group>
+											<field name="date" />
+											<field name="user_id" invisible="1" />
+											<field name="employee_id" required="1" options="{'no_create': True, 'no_create_edit': True}" />
+											<field name="name" />
+											<field name="unit_amount" string="Duration" widget="float_time" />
+											<field name="project_id" invisible="1" />
+											<field name="company_id" invisible="1" />
+										</group>
+									</sheet>
+								</form>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
+					<field name="activity_ids" widget="mail_activity" />
+					<field name="message_ids" widget="mail_thread" />
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_productivity_target_tree" model="ir.ui.view">
+		<field name="name">project.task.productivity.target.tree</field>
+		<field name="model">project.task</field>
+		<field name="arch" type="xml">
+			<tree string="Productivity Target">
+				<field name="name" placeholder="Project Name" />
+				<field name="project_id" />
+				<field name="project_type_id" />
+				<field name="productivity" />
+				<field name="target_year" />
+				<field name="target_month" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_view_productivity_target_form" model="ir.actions.act_window">
+		<field name="name">Productivity Target</field>
+		<field name="res_model">project.task</field>
+		<field name="domain">[]</field>
+		<field name="context">{}</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Add Productivity Target
+			</p>
+		</field>
+	</record>
+
+	<record id="open_view_productivity_target_kanban" model="ir.actions.act_window.view">
+		<field name="sequence" eval="1" />
+		<field name="view_mode">kanban</field>
+		<field name="act_window_id" ref="action_view_productivity_target_form" />
+	</record>
+
+	<record id="open_view_productivity_target_tree" model="ir.actions.act_window.view">
+		<field name="sequence" eval="2" />
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="view_productivity_target_tree" />
+		<field name="act_window_id" ref="action_view_productivity_target_form" />
+	</record>
+
+	<record id="open_view_productivity_target_form" model="ir.actions.act_window.view">
+		<field name="sequence" eval="3" />
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="view_productivity_target_form" />
+		<field name="act_window_id" ref="action_view_productivity_target_form" />
+	</record>
+
+	<record id="action_project_productivity_target_form" model="ir.actions.act_window">
+		<field name="name">Productivity Target</field>
+		<field name="res_model">project.task</field>
+		<field name="domain">[('project_id', '=', active_id)]</field>
+		<field name="context">{'default_project_id': active_id}</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="view_ids"
+			eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'kanban', }),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_productivity_target_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_productivity_target_form')})]" />
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Add Productivity Target
+			</p>
+		</field>
+	</record>
+
+
+	<record id="open_create_project_task" model="ir.actions.act_window">
+		<field name="name">Create a Productivity Target</field>
+		<field name="res_model">project.task</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="view_productivity_target_form" />
+	</record>
+
+	<record model="ir.ui.view" id="view_task_kanban_inherit_target">
+		<field name="name">project.task.kanban.inherit.target</field>
+		<field name="model">project.task</field>
+		<field name="inherit_id" ref="project.view_task_kanban" />
+		<field name="arch" type="xml">
+
+			<xpath expr="//kanban" position="attributes">
+				<attribute name="on_create">custom_project.open_create_project_task</attribute>
+			</xpath>
+
+			<!-- <kanban default_group_by="stage_id" class="o_kanban_small_column o_kanban_project_tasks" -->
+			<!-- on_create="open_create_project_task" quick_create_view="project.quick_create_task_form" examples="project"> -->
+			<!-- </kanban> -->
+		</field>
+	</record>
+
+	<!-- Project Assignment -->
+	<record id="view_project_assignment_form" model="ir.ui.view">
+		<field name="name">project.project.assignment.form</field>
+		<field name="model">project.project</field>
+		<field name="arch" type="xml">
+			<form string="Project Assignment">
+				<sheet>
+					<div class="oe_button_box" name="button_box" groups="base.group_user">
+						<button class="oe_stat_button" type="action" name="%(action_project_productivity_target_form)d"
+							icon="fa-tasks">
+							<field string="Assignments" name="task_count" widget="statinfo" options="{'label_field': 'label_tasks'}" />
+						</button>
+						<button class="oe_stat_button" name="%(hr_timesheet.act_hr_timesheet_line_by_project)d" type="action"
+							icon="fa-calendar" string="Timesheets" attrs="{'invisible': [('allow_timesheets', '=', False)]}"
+							groups="hr_timesheet.group_hr_timesheet_user" />
+					</div>
+					<widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+						attrs="{'invisible': [('active', '=', True)]}" />
+					<div class="oe_title">
+						<h1>
+							<field name="name" placeholder="Project Name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="active" invisible="1" />
+							<field name="allow_timesheets" invisible="1" />
+							<field name="company_id" invisible="1" />
+							<field name="project_type_id" options="{'no_create': True, 'no_create_edit': True}" />
+							<field name="user_id" string="Project Manager" options="{'no_create': True, 'no_create_edit': True}"
+								attrs="{'readonly':[('active','=', False)]}" />
+							<field name="productivity" />
+							<field name="target_year" />
+							<field name="target_month" />
+							<field name="employee_ids" widget="many2many_tags" />
+						</group>
+					</group>
+
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers"
+						help="Follow this project to automatically track the events associated to tasks and issues of this project."
+						groups="base.group_user" />
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_project_assignment_tree" model="ir.ui.view">
+		<field name="name">project.project.assignment.tree</field>
+		<field name="model">project.project</field>
+		<field name="arch" type="xml">
+			<tree string="Project Assignment">
+				<field name="name" placeholder="Project Name" />
+				<field name="project_type_id" />
+				<field name="productivity" />
+				<field name="target_year" />
+				<field name="target_month" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_project_assignment_form" model="ir.actions.act_window">
+		<field name="name">Project Assignment</field>
+		<field name="res_model">project.project</field>
+		<field name="domain">[]</field>
+		<field name="view_mode">kanban,tree,form</field>
+		<field name="target">main</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new project
+			</p>
+		</field>
+	</record>
+
+	<record id="open_view_project_assignment_kanban" model="ir.actions.act_window.view">
+		<field name="sequence" eval="1" />
+		<field name="view_mode">kanban</field>
+		<field name="act_window_id" ref="action_project_assignment_form" />
+	</record>
+
+	<record id="open_view_project_assignment_tree" model="ir.actions.act_window.view">
+		<field name="sequence" eval="2" />
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="view_project_assignment_tree" />
+		<field name="act_window_id" ref="action_project_assignment_form" />
+	</record>
+
+	<record id="open_view_project_assignment_form" model="ir.actions.act_window.view">
+		<field name="sequence" eval="3" />
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="view_project_assignment_form" />
+		<field name="act_window_id" ref="action_project_assignment_form" />
+	</record>
+
+
+	<!-- Project Type -->
+	<record id="view_project_type_form" model="ir.ui.view">
+		<field name="name">project.type.form</field>
+		<field name="model">project.type</field>
+		<field name="arch" type="xml">
+			<form string="Project Type">
+				<sheet>
+					<widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+						attrs="{'invisible': [('active', '=', True)]}" />
+					<group>
+						<group>
+							<field name="name" />
+							<field name="code" />
+							<field name="active" invisible="1" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_project_type_tree" model="ir.ui.view">
+		<field name="name">project.type.tree</field>
+		<field name="model">project.type</field>
+		<field name="arch" type="xml">
+			<tree string="Project Type">
+				<field name="name" />
+				<field name="code" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_view_project_type_form" model="ir.actions.act_window">
+		<field name="name">Project Type</field>
+		<field name="res_model">project.type</field>
+		<field name="domain">[]</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create new Project Type
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_project_assignment" parent="menu_main_productivity" action="action_project_assignment_form"
+		sequence="1" groups="base.group_no_one,project.group_project_user" />
+
+	<menuitem id="menu_productivity_target" parent="menu_main_productivity"
+		action="action_view_productivity_target_form" sequence="2" groups="base.group_no_one,project.group_project_user" />
+
+	<menuitem id="menu_project_type" parent="menu_productivit_config" action="action_view_project_type_form"
+		sequence="1" />
+
+</odoo>

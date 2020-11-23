@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="productivity_report_wizard_view" model="ir.ui.view">
+		<field name="name">Productivity Report</field>
+		<field name="model">productivity.report.wizard</field>
+		<field name="arch" type="xml">
+
+			<form>
+				<group col="4" colspan="4">
+					<field name="date_from" />
+					<field name="date_to" />
+					<field name="project_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}" />
+					<field name="employee_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}" />
+				</group>
+
+				<footer>
+					<button string='Print' name="print_productivity_report" type="object" class="btn-primary" icon="fa-download" />
+					<button string="Cancel" class="btn-default" special="cancel" />
+				</footer>
+			</form>
+
+		</field>
+	</record>
+
+	<record id="action_productivity_report_wizard_view" model="ir.actions.act_window">
+		<field name="name">Productivity Report</field>
+		<field name="res_model">productivity.report.wizard</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="productivity_report_wizard_view" />
+		<field name="target">new</field>
+	</record>
+	
+	<menuitem id="menu_productivity_report" parent="menu_main_productivity" groups="base.group_no_one,project.group_project_user"
+		action="action_productivity_report_wizard_view" sequence="4" />
+
+</odoo>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="report_productivity_report">
+		<t t-call="web.html_container">
+			<t t-call="web.internal_layout">
+				<div class="page">
+					<h2 class="text-center">
+						Productivity Report
+					</h2>
+
+					<div class="row mt32 col-12">
+						<div class="col-6">
+							<strong>
+								Date From:
+								<span t-esc="data['date_from']" />
+							</strong>
+						</div>
+						<div class="col-6">
+							<strong>
+								Date From:
+								<span t-esc="data['date_from']" />
+							</strong>
+						</div>
+					</div>
+
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>Project</th>
+								<th>Task</th>
+								<th>Employee</th>
+								<th>Records</th>
+								<th>Grade</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr t-foreach="productivity_list" t-as="line">
+								<td>
+									<span t-att-style="style" t-esc="line['project']" />
+								</td>
+								<td>
+									<span t-att-style="style" t-esc="line['task']" />
+								</td>
+								<td>
+									<span t-att-style="style" t-esc="line['employee']" />
+								</td>
+								<td>
+									<span t-att-style="style" t-esc="line['records']" />
+								</td>
+								<td>
+									<span t-att-style="style" t-esc="line['grade']" />
+								</td>
+								<td>
+									<span t-att-style="style" t-esc="line['label']" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</t>
+		</t>
+	</template>
+</odoo>

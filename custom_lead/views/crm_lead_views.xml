@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<!-- CRM Lead views -->
+	<record id="crm_lead_view_sample_form_" model="ir.ui.view">
+		<field name="name">crm.lead.sample.form</field>
+		<field name="model">crm.lead</field>
+		<field name="inherit_id" ref="crm.crm_lead_view_form" />
+		<field name="arch" type="xml">
+
+			<xpath expr="//group" position="inside">
+				<group>
+					<field name="approx_bill" />
+					<field name="record_count" />
+					<field name="department" />
+					<field name="sample_done_employee_id" />
+					<field name="sample_status" />
+					<field name="sample_priority" />
+				</group>
+			</xpath>
+
+		</field>
+	</record>
+
+	<record id="view_crm_leads_sample_search" model="ir.ui.view">
+		<field name="name">crm.lead.search.sample.lead</field>
+		<field name="model">crm.lead</field>
+		<field name="inherit_id" ref="crm.view_crm_case_opportunities_filter" />
+		<field name="arch" type="xml">
+
+			<filter name="source" position="after">
+				<separator orientation="vertical" />
+				<filter string="Sample Done by" name="sample_done_by" context="{'group_by':'sample_done_employee_id'}" />
+				<filter string="Sample Status" name="sample_status" context="{'group_by':'sample_status'}" />
+				<filter string="Sample Priority" name="sample_priority" context="{'group_by':'sample_priority'}" />
+			</filter>
+
+		</field>
+	</record>
+
+</odoo>
